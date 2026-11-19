@@ -25,7 +25,7 @@ describe('decide', () => {
 
     expect(request.status).toBe('pending');
     expect(request.step).toBe('finance');
-    expect(auditAction).toBe('approve');
+    expect(auditAction).toBe('approved');
   });
 
   it('routes a finance approval to the VP step', () => {
@@ -40,7 +40,7 @@ describe('decide', () => {
 
     expect(request.status).toBe('approved');
     expect(request.step).toBeNull();
-    expect(auditAction).toBe('approve');
+    expect(auditAction).toBe('approved');
   });
 
   it('marks the request rejected and clears the step', () => {
@@ -48,7 +48,7 @@ describe('decide', () => {
 
     expect(request.status).toBe('rejected');
     expect(request.step).toBeNull();
-    expect(auditAction).toBe('reject');
+    expect(auditAction).toBe('rejected');
   });
 
   it('rejects decisions from an actor who is not the current approver', () => {
