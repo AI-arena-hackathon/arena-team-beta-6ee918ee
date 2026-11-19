@@ -1,0 +1,12 @@
+[
+  {
+    "code": "BUDGET-TECH-24",
+    "label": "Technology Innovation",
+    "limit": 50000
+  },
+  {
+    "code": "BUDGET-OPER-23",
+    "label": "Operations",
+    "limit": 25000
+  }
+]
