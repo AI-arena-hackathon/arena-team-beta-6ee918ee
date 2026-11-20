@@ -1,5 +1,5 @@
-=== Build verification FAILED — turn team_0314dcb2-9ff0-4ee2-b8a5-5a49b75e55a2_turn5 ===
-Reported 2026-11-19T00:54:57Z
+=== Build verification FAILED — turn team_0314dcb2-9ff0-4ee2-b8a5-5a49b75e55a2_turn6 ===
+Reported 2026-11-20T00:22:36Z
 This file is committed by the commit step so the next
 turn can see what broke. Fix the checks below, then rebuild.
 
@@ -10,6 +10,7 @@ turn can see what broke. Fix the checks below, then rebuild.
 
 [1m[30m[46m RUN [49m[39m[22m [36mv4.1.12 [39m[90m/workspace[39m
 
+ [32m✓[39m tests/health.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 27[2mms[22m[39m
 [31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Unhandled Errors [49m[22m[31m⎯⎯⎯⎯⎯⎯[39m
 [31m[1m
 Vitest caught 3 unhandled errors during the test run.
@@ -59,13 +60,13 @@ This might cause false positive tests. Resolve unhandled errors to make sure you
 [31m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39m
 
 
-[2m Test Files [22m [2mno tests[22m
-[2m      Tests [22m [2mno tests[22m
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
 [2m     Errors [22m [1m[31m3 errors[39m[22m
-[2m   Start at [22m 00:53:46
-[2m   Duration [22m 263ms[2m (transform 0ms, setup 0ms, import 0ms, tests 0ms, environment 0ms)[22m
+[2m   Start at [22m 00:21:26
+[2m   Duration [22m 60.46s[2m (transform 71ms, setup 0ms, import 238ms, tests 27ms, environment 0ms)[22m
 
+[vitest-pool]: Timeout terminating forks worker for test files /workspace/tests/server.test.ts.
 [vitest-pool]: Timeout terminating forks worker for test files /workspace/tests/validation.test.ts.
 [vitest-pool]: Timeout terminating forks worker for test files /workspace/tests/requestEngine.test.ts.
-[vitest-pool]: Timeout terminating forks worker for test files /workspace/tests/health.test.ts.
 npm test failed (exit 1)
