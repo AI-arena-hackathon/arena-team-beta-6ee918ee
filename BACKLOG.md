@@ -14,6 +14,8 @@ you're actively working on in In Progress, add follow-ups to Todo.
 - [x] Implement the core feature from README.md — the smallest real version that works (request validation, approval engine, health endpoint, API error handling)
 - [x] Add tests covering the core feature and the health endpoint (now incl. request API error paths: `tests/server.test.ts`)
 - [x] Refactor: extract shared error-response helper in `src/server.ts` (dedupe error envelopes / not-found branches)
+- [x] Add a test suite for the `RequestStore` layer (create/get/list/decide/audit)
+- [x] Cut hot-path waste in `RequestStore`: replace the full audit-log array scan in `listAudit` with a per-request index (performance milestone — Ellis, Cost Optimizer)
 
 ## In Progress
 
@@ -30,3 +32,9 @@ you're actively working on in In Progress, add follow-ups to Todo.
 - [ ] Add a test suite for the `RequestStore` layer (create/get/list/decide/audit)
 
 - [ ] Add follow-up tasks here as the build progresses
+
+### Follow-ups (added by Cost Optimizer turns)
+
+- [ ] Return copies from `RequestStore.get` / `list` so callers cannot mutate internal state
+- [ ] Bound audit-log growth / retention in the in-memory store
+- [ ] Serve `GET /requests/:id/decision` so the dashboard can poll request state without POSTing decisions

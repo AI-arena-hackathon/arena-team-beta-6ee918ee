@@ -9,7 +9,7 @@ import { decide } from './requestEngine';
 
 export class RequestStore {
   private readonly requests = new Map<string, Request>();
-  private readonly auditLog: AuditEntry[] = [];
+  private readonly auditsByRequest = new Map<string, AuditEntry[]>();
   private seq = 0;
   private auditSeq = 1;
 
@@ -52,7 +52,8 @@ export class RequestStore {
   }
 
   listAudit(requestId: string): AuditEntry[] {
-    return this.auditLog.filter((entry) => entry.requestId === requestId);
+    const entries = this.auditsByRequest.get(requestId);
+    return entries ? [...entries] : [];
   }
 
   private appendAudit(
@@ -60,12 +61,14 @@ export class RequestStore {
     actor: string,
     action: AuditAction
   ): void {
-    this.auditLog.push({
+    const entries = this.auditsByRequest.get(requestId) ?? [];
+    entries.push({
       id: this.auditSeq++,
       requestId,
       actor,
       action,
       ts: new Date().toISOString(),
     });
+    this.auditsByRequest.set(requestId, entries);
   }
 }
