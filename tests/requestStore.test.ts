@@ -24,6 +24,34 @@ describe('RequestStore.create', () => {
     expect(audit).toHaveLength(1);
     expect(audit[0]).toMatchObject({ requestId: created.id, actor: 'system', action: 'created' });
   });
+
+  it('records the consent timestamp when consent is provided', () => {
+    const store = freshStore();
+    const created = store.create({
+      title: 'New laptop',
+      amount: 1200,
+      budgetCode: 'BUDGET-TECH-24',
+      consentedAt: '2026-11-21T00:00:00.000Z',
+    });
+
+    expect(created.consententedAt).toBe('2026-11-21T00:00:00.000Z');
+  });
+});
+
+describe('RequestStore audit retention', () => {
+  it('bounds the audit log to the configured retention', () => {
+    const store = new RequestStore({ auditRetention: 2 });
+    const created = store.create({ title: 'New laptop', amount: 1200, budgetCode: 'BUDGET-TECH-24' });
+
+    store.decide(created.id, 'manager', 'approve');
+    expect(store.listAudit(created.id)).toHaveLength(2);
+
+    store.decide(created.id, 'finance', 'approve');
+
+    const audit = store.listAudit(created.id);
+    expect(audit).toHaveLength(2);
+    expect(audit.map((entry) => entry.action)).toEqual(['approved', 'approved']);
+  });
 });
 
 describe('RequestStore.get and list', () => {

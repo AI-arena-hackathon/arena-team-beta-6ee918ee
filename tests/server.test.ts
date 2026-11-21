@@ -35,6 +35,30 @@ describe('POST /requests', () => {
       error: { code: 'BUDGET_EXCEEDED', budgetCode: 'BUDGET-TECH-24', limit: 50000 },
     });
   });
+
+  it('returns 422 CONSENT_REQUIRED when consent is not given', async () => {
+    const res = await request(createApp()).post('/requests').send({
+      title: 'No consent given',
+      amount: 10,
+      budgetCode: 'BUDGET-TECH-24',
+    });
+
+    expect(res.status).toBe(422);
+    expect(res.body.error.code).toBe('CONSENT_REQUIRED');
+  });
+
+  it('creates a consented request and returns the compliance disclaimer', async () => {
+    const res = await request(createApp()).post('/requests').send({
+      title: 'Consented laptop',
+      amount: 10,
+      budgetCode: 'BUDGET-TECH-24',
+      consent: true,
+    });
+
+    expect(res.status).toBe(201);
+    expect(res.body.request.consententedAt).toBeDefined();
+    expect(typeof res.body.disclaimer).toBe('string');
+  });
 });
 
 describe('POST /requests/:id/decision', () => {

@@ -2,21 +2,39 @@ import { describe, it, expect } from 'vitest';
 import { checkAmountAgainstBudget, CreateRequestSchema, DecisionSchema } from '../src/lib/validation';
 
 describe('CreateRequestSchema', () => {
-  it('accepts a valid create payload', () => {
+  const validPayload = {
+    title: 'New laptop',
+    amount: 1200,
+    budgetCode: 'BUDGET-TECH-24',
+    consent: true,
+  };
+
+  it('accepts a valid create payload with explicit consent', () => {
+    const parsed = CreateRequestSchema.safeParse(validPayload);
+
+    expect(parsed.success).toBe(true);
+  });
+
+  it('rejects a create payload without explicit consent', () => {
     const parsed = CreateRequestSchema.safeParse({
       title: 'New laptop',
       amount: 1200,
       budgetCode: 'BUDGET-TECH-24',
     });
 
-    expect(parsed.success).toBe(true);
+    expect(parsed.success).toBe(false);
+  });
+
+  it('rejects a create payload that does not consent to data processing', () => {
+    const parsed = CreateRequestSchema.safeParse({ ...validPayload, consent: false });
+
+    expect(parsed.success).toBe(false);
   });
 
   it('trims the title before storing', () => {
     const parsed = CreateRequestSchema.safeParse({
+      ...validPayload,
       title: '  New laptop  ',
-      amount: 1200,
-      budgetCode: 'BUDGET-TECH-24',
     });
 
     expect(parsed.success && parsed.data.title).toBe('New laptop');
@@ -24,9 +42,8 @@ describe('CreateRequestSchema', () => {
 
   it('rejects an empty title', () => {
     const parsed = CreateRequestSchema.safeParse({
+      ...validPayload,
       title: '   ',
-      amount: 1200,
-      budgetCode: 'BUDGET-TECH-24',
     });
 
     expect(parsed.success).toBe(false);
@@ -34,9 +51,8 @@ describe('CreateRequestSchema', () => {
 
   it('rejects a non-positive amount', () => {
     const parsed = CreateRequestSchema.safeParse({
-      title: 'New laptop',
+      ...validPayload,
       amount: 0,
-      budgetCode: 'BUDGET-TECH-24',
     });
 
     expect(parsed.success).toBe(false);
@@ -44,9 +60,8 @@ describe('CreateRequestSchema', () => {
 
   it('rejects an amount above the per-request maximum', () => {
     const parsed = CreateRequestSchema.safeParse({
-      title: 'New laptop',
+      ...validPayload,
       amount: 2000000,
-      budgetCode: 'BUDGET-TECH-24',
     });
 
     expect(parsed.success).toBe(false);
