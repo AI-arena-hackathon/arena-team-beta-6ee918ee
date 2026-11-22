@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import request from 'supertest';
 import { createApp } from '../src/server';
+import { COMPLIANCE_DISCLAIMER } from '../src/lib/copy';
 
 describe('GET /requests/:id', () => {
   it('returns 404 NOT_FOUND for an unknown request', async () => {
@@ -56,8 +57,8 @@ describe('POST /requests', () => {
     });
 
     expect(res.status).toBe(201);
-    expect(res.body.request.consententedAt).toBeDefined();
-    expect(typeof res.body.disclaimer).toBe('string');
+    expect(res.body.request.consentedAt).toBeDefined();
+    expect(res.body.disclaimer).toBe(COMPLIANCE_DISCLAIMER);
   });
 });
 
@@ -67,6 +68,7 @@ describe('POST /requests/:id/decision', () => {
       title: 'Late refactor',
       amount: 10,
       budgetCode: 'BUDGET-TECH-24',
+      consent: true,
     });
     const id = created.body.request.id;
 
@@ -84,6 +86,7 @@ describe('POST /requests/:id/decision', () => {
       title: 'Second late refactor',
       amount: 10,
       budgetCode: 'BUDGET-TECH-24',
+      consent: true,
     });
     const id = created.body.request.id;
 

@@ -34,7 +34,7 @@ describe('RequestStore.create', () => {
       consentedAt: '2026-11-21T00:00:00.000Z',
     });
 
-    expect(created.consententedAt).toBe('2026-11-21T00:00:00.000Z');
+    expect(created.consentedAt).toBe('2026-11-21T00:00:00.000Z');
   });
 });
 

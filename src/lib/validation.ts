@@ -12,6 +12,9 @@ export const CreateRequestSchema = z.object({
     .positive('Amount must be greater than zero')
     .max(1000000, 'Amount exceeds the per-request maximum'),
   budgetCode: z.string().min(1, 'Budget code is required'),
+  consent: z
+    .boolean({ error: 'Consent is required' })
+    .refine((value) => value === true, { message: 'Consent is required' }),
 });
 
 export const DecisionSchema = z.object({

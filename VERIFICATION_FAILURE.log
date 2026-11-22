@@ -1,12 +1,8 @@
-=== Build verification FAILED — turn team_0314dcb2-9ff0-4ee2-b8a5-5a49b75e55a2_turn8 ===
-Reported 2026-11-21T00:50:04Z
+=== Build verification FAILED — turn team_0314dcb2-9ff0-4ee2-b8a5-5a49b75e55a2_turn9 ===
+Reported 2026-11-22T00:27:03Z
 This file is committed by the commit step so the next
 turn can see what broke. Fix the checks below, then rebuild.
 
-tests/requestStore.test.ts(34,7): error TS2353: Object literal may only specify known properties, and 'consentedAt' does not exist in type '{ title: string; amount: number; budgetCode: string; }'.
-tests/requestStore.test.ts(37,20): error TS2339: Property 'consententedAt' does not exist on type 'Request'.
-tests/requestStore.test.ts(43,36): error TS2554: Expected 0 arguments, but got 1.
-TypeScript type-check failed (npx tsc --noEmit) — if typescript is not in devDependencies, add it with: npm install --save-dev typescript
 
 > procurement-pulse-dashboard@0.1.0 test
 > vitest run
@@ -15,7 +11,7 @@ TypeScript type-check failed (npx tsc --noEmit) — if typescript is not in devD
 [1m[30m[46m RUN [49m[39m[22m [36mv4.1.12 [39m[90m/workspace[39m
 
  [32m✓[39m tests/requestEngine.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 9[2mms[22m[39m
- [32m✓[39m tests/health.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m tests/health.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 33[2mms[22m[39m
 [31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Unhandled Errors [49m[22m[31m⎯⎯⎯⎯⎯⎯[39m
 [31m[1m
 Vitest caught 3 unhandled errors during the test run.
@@ -68,8 +64,8 @@ This might cause false positive tests. Resolve unhandled errors to make sure you
 [2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
 [2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
 [2m     Errors [22m [1m[31m3 errors[39m[22m
-[2m   Start at [22m 00:48:54
-[2m   Duration [22m 60.48s[2m (transform 101ms, setup 0ms, import 300ms, tests 37ms, environment 0ms)[22m
+[2m   Start at [22m 00:25:53
+[2m   Duration [22m 60.58s[2m (transform 116ms, setup 0ms, import 346ms, tests 43ms, environment 0ms)[22m
 
 [vitest-pool]: Timeout terminating forks worker for test files /workspace/tests/requestStore.test.ts.
 [vitest-pool]: Timeout terminating forks worker for test files /workspace/tests/server.test.ts.

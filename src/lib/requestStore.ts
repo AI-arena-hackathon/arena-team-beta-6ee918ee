@@ -7,16 +7,28 @@ import type {
 } from '../types';
 import { decide } from './requestEngine';
 
+const DEFAULT_AUDIT_RETENTION = 100;
+
+export interface RequestStoreOptions {
+  auditRetention?: number;
+}
+
 export class RequestStore {
   private readonly requests = new Map<string, Request>();
   private readonly auditsByRequest = new Map<string, AuditEntry[]>();
+  private readonly auditRetention: number;
   private seq = 0;
   private auditSeq = 1;
+
+  constructor(options: RequestStoreOptions = {}) {
+    this.auditRetention = options.auditRetention ?? DEFAULT_AUDIT_RETENTION;
+  }
 
   create(input: {
     title: string;
     amount: number;
     budgetCode: string;
+    consentedAt?: string;
   }): Request {
     const request: Request = {
       id: `req-${++this.seq}`,
@@ -26,6 +38,7 @@ export class RequestStore {
       status: 'pending',
       step: 'manager',
       createdAt: new Date().toISOString(),
+      consentedAt: input.consentedAt ?? new Date().toISOString(),
     };
     this.requests.set(request.id, request);
     this.appendAudit(request.id, 'system', 'created');
@@ -53,7 +66,12 @@ export class RequestStore {
 
   listAudit(requestId: string): AuditEntry[] {
     const entries = this.auditsByRequest.get(requestId);
-    return entries ? [...entries] : [];
+    if (!entries) {
+      return [];
+    }
+    return entries.length > this.auditRetention
+      ? entries.slice(-this.auditRetention)
+      : [...entries];
   }
 
   private appendAudit(

@@ -1,6 +1,7 @@
 import express, { type Express, type NextFunction, type Request, type Response } from 'express';
 import { checkAmountAgainstBudget, CreateRequestSchema, DecisionSchema } from './lib/validation';
 import { RequestStore } from './lib/requestStore';
+import { COMPLIANCE_DISCLAIMER } from './lib/copy';
 import { ActorMismatchError, RequestNotPendingError, decide } from './lib/requestEngine';
 export const store = new RequestStore();
 
@@ -27,18 +28,25 @@ export function createApp(): Express {
 
   app.post('/requests', (req: Request, res: Response) => {
     const parsed = CreateRequestSchema.safeParse(req.body);
-    if (!parsed.success) {
+
+    if (!parsed.success && parsed.error.issues.some((issue) => issue.path[0] !== 'consent')) {
       return sendError(res, 422, 'VALIDATION_ERROR', { details: parsed.error.flatten() });
     }
 
-    const { title, amount, budgetCode } = parsed.data;
+    const amount = parsed.success ? parsed.data.amount : Number(req.body?.amount ?? 0);
+    const budgetCode = parsed.success ? parsed.data.budgetCode : String(req.body?.budgetCode ?? '');
     const check = checkAmountAgainstBudget(amount, budgetCode);
     if (!check.ok) {
       return sendError(res, 422, 'BUDGET_EXCEEDED', { budgetCode, limit: check.limit });
     }
 
+    if (!parsed.success) {
+      return sendError(res, 422, 'CONSENT_REQUIRED', { details: parsed.error.flatten() });
+    }
+
+    const { title } = parsed.data;
     const request = store.create({ title, amount, budgetCode });
-    return res.status(201).json({ request });
+    return res.status(201).json({ request, disclaimer: COMPLIANCE_DISCLAIMER });
   });
 
   app.get('/requests/:id', (req: Request, res: Response) => {

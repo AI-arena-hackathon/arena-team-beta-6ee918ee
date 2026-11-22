@@ -14,6 +14,7 @@ export interface Request {
   status: ApprovalStatus;
   step: ApprovalStep | null;
   createdAt: string;
+  consentedAt?: string;
 }
 
 export interface AuditEntry {
